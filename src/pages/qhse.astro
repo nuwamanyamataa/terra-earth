@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBanner from '../components/PageBanner.astro';
+import Icon from '../components/Icon.astro';
+import CTABand from '../components/CTABand.astro';
+import { company } from '../data/site';
+
+const pillars = [
+  { icon: 'badge', title: 'Quality', points: ['Work checked against drawings, specifications and client requirements', 'Material testing and inspections at critical stages', 'Continuous improvement through lessons learned on every project'] },
+  { icon: 'users', title: 'Health', points: ['Healthy working conditions for employees, contractors and visitors', 'Welfare facilities and first aid on site', 'Workforce training and professional development'] },
+  { icon: 'hardhat', title: 'Safety', points: ['Risk-based hazard identification before work starts', 'Correct PPE for every task and every person on site', 'Incidents and near-misses reported, investigated and acted on'] },
+  { icon: 'leaf', title: 'Environment', points: ['Environmental impacts minimised through responsible planning', 'Compliance with NEMA and national environmental legislation', 'Sites restored and handed back in good condition'] },
+];
+const practices = [
+  { icon: 'hardhat', title: 'Personal protective equipment', text: 'Hard hats, high-visibility vests, safety boots and task-specific PPE on every site.' },
+  { icon: 'users', title: 'Toolbox talks', text: 'Short daily safety briefings so every worker knows the day’s hazards and controls.' },
+  { icon: 'clipboard', title: 'Risk assessments', text: 'Written risk assessments and method statements for higher-risk activities.' },
+  { icon: 'alert', title: 'Incident reporting', text: 'A no-blame reporting culture so problems are fixed before they cause harm.' },
+];
+const environment = [
+  { icon: 'recycle', title: 'Waste handling', text: 'Waste separated, stored safely and disposed of through approved routes.' },
+  { icon: 'water', title: 'Spill control', text: 'Fuel and chemicals stored safely, with spill kits and procedures on site.' },
+  { icon: 'leaf', title: 'Restoration', text: 'Disturbed land reinstated and replanted at the end of the works.' },
+];
+---
+<BaseLayout
+  title="QHSE — Quality, Health, Safety & Environment | Terra Earth Engineering"
+  description="Terra Earth Engineering's Quality, Health, Safety and Environment (QHSE) commitment: risk-based safety management, PPE, toolbox talks, environmental care and regulatory compliance in Uganda."
+>
+  <PageBanner title="Quality, Health, Safety & Environment" label="QHSE commitment" intro="Safety and environmental responsibility are non-negotiable pillars throughout every phase of a project we undertake." image="/images/site-crew-aggregate.webp" />
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <span class="label">Our commitment</span>
+        <h2>A QHSE framework in every project</h2>
+        <p>{company.shortName} maintains a robust Quality, Health, Safety and Environment (QHSE) framework that is integrated into all our operations and project activities.</p>
+        <p>We are committed to safe and healthy working environments for employees, contractors and stakeholders, while minimising environmental impacts through responsible planning and execution. We comply strictly with regulatory requirements, industry standards and client specifications, and promote a culture of continuous improvement at every level of the organisation.</p>
+        <p>Through risk-based management, we identify, assess and mitigate hazards to protect people, assets and the environment. We also invest in workforce training and professional development to strengthen technical competence and safety awareness.</p>
+      </div>
+      <blockquote class="quote reveal">
+        <Icon name="shield" />
+        <p>“Safety and environmental responsibility are regarded as non-negotiable pillars throughout every phase of a project we undertake.”</p>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head"><span class="label">Four pillars</span><h2>What we commit to</h2></div>
+      <div class="grid grid--4">
+        {pillars.map((p) => (
+          <div class="card pillar reveal">
+            <div class="icon-box"><Icon name={p.icon} /></div>
+            <h3>{p.title}</h3>
+            <ul class="check-list">{p.points.map((pt) => <li>{pt}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <figure class="photo qphoto reveal"><img src="/images/field-testing-retaining-wall.webp" alt="Two engineers in high-visibility vests carrying out field tests beside a stone retaining wall" loading="lazy" width="900" height="900" /></figure>
+      <div>
+        <span class="label">On site</span>
+        <h2>Site safety practices</h2>
+        <div class="list-items">
+          {practices.map((p) => (
+            <div class="li reveal"><div class="icon-box"><Icon name={p.icon} /></div><div><h3>{p.title}</h3><p>{p.text}</p></div></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <div class="section-head"><span class="label">Environmental care</span><h2>Leaving sites better than we found them</h2></div>
+      <div class="grid grid--3">
+        {environment.map((e) => (
+          <div class="env reveal"><div class="icon-box"><Icon name={e.icon} /></div><h3>{e.title}</h3><p>{e.text}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container split">
+      <div>
+        <span class="label">QHSE services for your project</span>
+        <h2>Need QHSE support on your own site?</h2>
+        <p>We prepare QHSE plans and policies, carry out site safety inspections and risk assessments, run health and safety training and toolbox talks, and provide quality control and environmental monitoring during construction.</p>
+      </div>
+      <div class="policy card">
+        <Icon name="file" />
+        <div>
+          <h3>QHSE policy</h3>
+          <p class="muted">Our QHSE policy is available to clients and procurement teams on request.</p>
+          <a class="btn btn--dark" href={`mailto:${company.email}?subject=${encodeURIComponent('Request: Terra Earth QHSE policy')}`}><Icon name="mail" /> Request the policy</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTABand title="Planning a project? Let's make it safe from day one." />
+</BaseLayout>
+
+<style>
+  .quote { margin: 0; background: var(--terra-charcoal); color: #fff; padding: var(--space-12) var(--space-8); border-radius: var(--radius-md); border-left: 6px solid var(--terra-green); }
+  .quote :global(svg) { width: 40px; height: 40px; color: var(--terra-green); margin-bottom: var(--space-4); }
+  .quote p { font-size: 1.35rem; font-weight: 600; line-height: 1.45; margin: 0; }
+  .pillar h3 { margin-bottom: var(--space-4); }
+  .pillar .check-list li { font-size: 0.93rem; }
+  .qphoto { aspect-ratio: 1; }
+  .list-items { display: grid; gap: var(--space-6); margin-top: var(--space-6); }
+  .li { display: flex; gap: var(--space-4); }
+  .li .icon-box { flex: none; margin: 0; }
+  .li h3 { margin-bottom: 4px; }
+  .li p { margin: 0; color: var(--ink-muted); }
+  .env h3 { margin-bottom: var(--space-2); }
+  .policy { display: flex; gap: var(--space-4); align-items: flex-start; }
+  .policy > :global(svg) { width: 40px; height: 40px; color: var(--green-text); flex: none; }
+</style>

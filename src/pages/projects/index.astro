@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import CTABand from '../../components/CTABand.astro';
+import { projectCategories } from '../../data/site';
+import { getProjects, fieldPhotos } from '../../data/content';
+
+const projects = await getProjects();
+const filters = ['All', ...projectCategories];
+---
+<BaseLayout
+  title="Projects | Water, Solar, Environmental & Civil Engineering Work in Uganda | Terra Earth"
+  description="Projects by Terra Earth Engineering: solar water pumping and irrigation, boreholes, environmental assessments and civil works across Uganda."
+>
+  <PageBanner title="Projects" label="Our work" intro="A selection of our projects and field work. Each project page sets out the challenge, our solution and the result." image="/images/floating-solar-pump.webp" />
+
+  <section class="section">
+    <div class="container">
+      <div class="filters" role="group" aria-label="Filter projects by service" data-filters>
+        {filters.map((f, i) => <button type="button" data-filter={f} aria-pressed={i === 0 ? 'true' : 'false'}>{f}</button>)}
+      </div>
+      <p class="visually-hidden" aria-live="polite" data-filter-status></p>
+
+      <h2 class="visually-hidden">Projects</h2>
+      <div class="grid grid--3">
+        {projects.map((p) => (
+          <ProjectCard title={p.data.title} href={`/projects/${p.slug}`} image={p.data.image} imageAlt={p.data.imageAlt} location={p.data.location} clientType={p.data.clientType} year={p.data.year} categories={p.data.categories} draft={p.data.draft} />
+        ))}
+      </div>
+
+      <div class="field">
+        <div class="section-head">
+          <span class="label">From the field</span>
+          <h2>Our teams at work</h2>
+          <p class="lead">Photos from our sites: drilling, surveys, civil works, testing and solar pumping.</p>
+        </div>
+        <div class="field__grid">
+          {fieldPhotos.map((f) => (
+            <figure class="field__item reveal" data-categories={f.category}>
+              <img src={f.src} alt={f.alt} loading="lazy" width="800" height="1000" />
+              <figcaption><span class="tag">{f.category}</span>{f.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTABand title="Have a similar project?" text="Tell us about your site. We'll advise on the best approach and give you a clear quotation." />
+</BaseLayout>
+
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-8); }
+  .filters button { min-height: 44px; padding: 0 var(--space-4); font: inherit; font-size: 0.88rem; font-weight: 600; color: var(--terra-charcoal); background: #fff; border: 1.5px solid var(--line); border-radius: var(--radius-sm); cursor: pointer; }
+  .filters button:hover { border-color: var(--terra-green); }
+  .filters button[aria-pressed='true'] { background: var(--terra-charcoal); border-color: var(--terra-charcoal); color: #fff; }
+  .field { margin-top: var(--space-16); padding-top: var(--space-16); border-top: 1px solid var(--line); }
+  .field__grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 960px) { .field__grid { grid-template-columns: repeat(5, 1fr); } }
+  .field__item { margin: 0; position: relative; aspect-ratio: 4 / 5; border-radius: var(--radius-md); overflow: hidden; background: var(--surface-alt); }
+  .field__item[hidden] { display: none; }
+  .field__item img { width: 100%; height: 100%; object-fit: cover; }
+  .field__item figcaption { position: absolute; left: 0; right: 0; bottom: 0; display: grid; gap: 6px; justify-items: start; padding: var(--space-8) var(--space-3) var(--space-3); background: linear-gradient(transparent, rgba(41,54,65,.92)); color: #fff; font-weight: 600; font-size: 0.88rem; }
+</style>

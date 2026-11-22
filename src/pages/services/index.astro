@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import Icon from '../../components/Icon.astro';
+import CTABand from '../../components/CTABand.astro';
+import { getServices } from '../../data/content';
+
+const services = await getServices();
+const rows = [
+  ...services.map((s) => ({
+    title: s.data.title, promise: s.data.promise, summary: s.data.summary, icon: s.data.icon,
+    image: s.data.image, imageAlt: s.data.imageAlt, href: `/services/${s.slug}`,
+    items: s.data.offers.slice(0, 6).map((o) => o.title),
+  })),
+  {
+    title: 'Quality, Health, Safety & Environment (QHSE)', promise: 'Safety and quality are built into every job.',
+    summary: 'A QHSE framework integrated into every project, plus QHSE plans, inspections and training for your own sites.',
+    icon: 'hardhat', image: '/images/site-crew-aggregate.webp', imageAlt: 'Site crew wearing hard hats and high-visibility vests', href: '/qhse',
+    items: ['QHSE plans and policies', 'Site safety inspections and risk assessments', 'Health and safety training and toolbox talks', 'Quality control and assurance', 'Environmental monitoring during construction'],
+  },
+];
+---
+<BaseLayout
+  title="Engineering Services in Uganda | Civil, Environmental, Water & Solar | Terra Earth"
+  description="Civil engineering works, environmental engineering and ESIA, water resources and solar pumping, project management and QHSE services across Uganda from Terra Earth Engineering."
+>
+  <PageBanner title="Our services" label="What we do" intro="Five service lines that cover the full life of a project — from feasibility and environmental approval to construction, commissioning and handover." crumbs={[]} image="/images/borehole-drilling-rig.webp" />
+
+  <section class="section">
+    <div class="container">
+      <nav class="jump" aria-label="Jump to a service">
+        {rows.map((r) => <a href={r.href}><Icon name={r.icon} /> {r.title.replace(' (QHSE)', '')}</a>)}
+      </nav>
+      <div class="rows">
+        {rows.map((r, i) => (
+          <article class:list={['row', 'reveal', { 'row--flip': i % 2 === 1 }]}>
+            <div class="row__img photo"><img src={r.image} alt={r.imageAlt} loading={i === 0 ? 'eager' : 'lazy'} width="700" height="1190" /></div>
+            <div class="row__body">
+              <div class="icon-box"><Icon name={r.icon} /></div>
+              <h2>{r.title}</h2>
+              <p class="row__promise">{r.promise}</p>
+              <p>{r.summary}</p>
+              <ul class="check-list row__list">{r.items.map((it) => <li>{it}</li>)}</ul>
+              <a class="btn btn--dark" href={r.href}>View service <Icon name="arrow" /></a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTABand />
+</BaseLayout>
+
+<style>
+  .jump { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-16); }
+  .jump a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-sm); font-weight: 600; font-size: 0.9rem; color: var(--terra-charcoal); text-decoration: none; }
+  .jump a:hover { border-color: var(--terra-green); background: var(--green-soft); }
+  .jump :global(svg) { width: 18px; height: 18px; color: var(--green-text); }
+  .rows { display: grid; gap: var(--space-16); }
+  .row { display: grid; gap: var(--space-8); align-items: center; }
+  @media (min-width: 960px) {
+    .row { grid-template-columns: 5fr 7fr; gap: var(--space-16); }
+    .row--flip { grid-template-columns: 7fr 5fr; }
+    .row--flip .row__img { order: 2; }
+  }
+  .row__img { aspect-ratio: 4 / 3; }
+  @media (min-width: 960px) { .row__img { aspect-ratio: 4 / 5; max-height: 520px; } }
+  .row__promise { font-weight: 600; color: var(--green-text); font-size: 1.1rem; }
+  .row__list { display: grid; gap: 0 var(--space-6); }
+  @media (min-width: 640px) { .row__list { grid-template-columns: 1fr 1fr; } }
+</style>

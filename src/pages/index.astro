@@ -1,0 +1,218 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import DirectorCard from '../components/DirectorCard.astro';
+import CTABand from '../components/CTABand.astro';
+import { company, directors, whatsappLink } from '../data/site';
+import { getProjects, getServices, fieldPhotos } from '../data/content';
+
+const services = await getServices();
+const projects = (await getProjects()).filter((p) => p.data.featured).slice(0, 3);
+const photoFill = fieldPhotos.slice(0, Math.max(0, 3 - projects.length));
+
+const trust = [
+  { icon: 'badge', title: 'Registered Ugandan company', text: 'Incorporated with URSB, December 2024' },
+  { icon: 'users', title: 'Qualified engineers', text: 'Civil, environmental and water specialists' },
+  { icon: 'leaf', title: 'Environment & water experts', text: 'ESIA, boreholes, irrigation, solar pumping' },
+  { icon: 'map', title: 'Projects across Uganda', text: 'Serving clients in every region' },
+];
+const why = [
+  { icon: 'users', title: 'Engineer-led team', text: 'Civil engineers, environmental specialists, water resources engineers, hydrologists, quantity surveyors and sociologists work on every project together.' },
+  { icon: 'layers', title: 'One firm, study to construction', text: 'Feasibility, design, approvals, construction and supervision under one roof — fewer hand-offs, fewer gaps.' },
+  { icon: 'shield', title: 'Compliance built in', text: 'Work aligned with NEMA requirements, national regulations and international safeguard standards.' },
+  { icon: 'hardhat', title: 'Safety and quality on every site', text: 'A QHSE framework runs through every job, from risk assessment to handover.' },
+];
+const steps = [
+  { title: 'Consult & site visit', text: 'We listen, visit the site and agree what success looks like.' },
+  { title: 'Study & design', text: 'Surveys, tests and designs with a clear cost and programme.' },
+  { title: 'Build & install', text: 'Our team builds, installs or supervises — safely and to standard.' },
+  { title: 'Commission & support', text: 'Testing, training and handover, backed by warranty and support.' },
+];
+---
+<BaseLayout
+  title="Terra Earth Engineering | Civil, Environmental & Water Resources Engineers in Uganda"
+  description="Terra Earth Engineering (U) Limited — Ugandan engineers for boreholes, solar water pumping, irrigation, ESIAs, civil works and project management. Based in Naalya, Wakiso."
+>
+  <!-- Hero -->
+  <section class="hero on-dark">
+    <picture>
+      <source media="(max-width: 800px)" srcset="/images/hero-floating-solar-pump-800.webp" />
+      <img class="hero__img" src="/images/hero-floating-solar-pump.webp" alt="" width="1600" height="1204" fetchpriority="high" />
+    </picture>
+    <div class="container hero__inner">
+      <p class="hero__eyebrow">{company.tagline.join(' | ')}</p>
+      <h1>Engineering solutions for water, environment and infrastructure.</h1>
+      <p class="hero__sub">Uganda-based engineers delivering boreholes, solar water systems, environmental assessments and civil works — on time and to standard.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/quote">Request a Quote <Icon name="arrow" /></a>
+        <a class="btn btn--outline-light" href="/services">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust strip -->
+  <section class="trust" aria-label="Why clients trust us">
+    <div class="container trust__grid">
+      {trust.map((t) => (
+        <div class="trust__item">
+          <Icon name={t.icon} />
+          <div><strong>{t.title}</strong><span>{t.text}</span></div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="label">What we do</span>
+        <h2>Five service lines, one engineering partner</h2>
+        <p class="lead">From the first site visit to final handover, we cover the technical, environmental and management sides of your project.</p>
+      </div>
+      <div class="grid grid--3 services-grid">
+        {services.map((s) => (
+          <ServiceCard title={s.data.title} text={s.data.summary} href={`/services/${s.slug}`} icon={s.data.icon} />
+        ))}
+        <ServiceCard title="QHSE" text="Quality, health, safety and environment plans, inspections and training that keep sites safe and compliant." href="/qhse" icon="hardhat" />
+        <div class="services-cta reveal">
+          <h3>Not sure which service fits?</h3>
+          <p>Tell us about your project and we will point you to the right team.</p>
+          <a class="btn btn--primary" href={whatsappLink()} target="_blank" rel="noopener"><Icon name="chat" /> Ask on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why choose us -->
+  <section class="section section--dark">
+    <div class="container split split--wide-left">
+      <div>
+        <span class="label">Why choose Terra Earth</span>
+        <h2>Technically sound. Environmentally responsible. Delivered.</h2>
+        <p class="lead">We combine engineering software, GIS mapping, hydraulic modelling and established environmental assessment methods to deliver data-driven solutions that fit each site.</p>
+        <div class="grid grid--2 why">
+          {why.map((w) => (
+            <div class="why__item reveal">
+              <div class="icon-box"><Icon name={w.icon} /></div>
+              <h3>{w.title}</h3>
+              <p>{w.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <figure class="photo why__photo reveal">
+        <img src="/images/field-testing-retaining-wall.webp" alt="Two Terra Earth engineers in high-visibility vests carrying out field tests beside a stone retaining wall" loading="lazy" width="900" height="900" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- Featured work -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head-row">
+        <div class="section-head">
+          <span class="label">Our work</span>
+          <h2>Recent projects and field work</h2>
+        </div>
+        <a class="btn btn--outline" href="/projects">View all projects <Icon name="arrow" /></a>
+      </div>
+      <div class="grid grid--3">
+        {projects.map((p) => (
+          <ProjectCard title={p.data.title} href={`/projects/${p.slug}`} image={p.data.image} imageAlt={p.data.imageAlt} location={p.data.location} clientType={p.data.clientType} year={p.data.year} categories={p.data.categories} draft={p.data.draft} />
+        ))}
+        {photoFill.map((f) => (
+          <figure class="field-card reveal">
+            <img src={f.src} alt={f.alt} loading="lazy" width="800" height="1000" />
+            <figcaption><span class="tag">{f.category}</span> {f.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How we work -->
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <span class="label">How we work</span>
+        <h2>A clear process from first call to handover</h2>
+      </div>
+      <ol class="steps">
+        {steps.map((s, i) => (
+          <li class="step reveal">
+            <span class="step__num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Directors -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head-row">
+        <div class="section-head">
+          <span class="label">Leadership</span>
+          <h2>Meet the directors</h2>
+          <p class="lead">Terra Earth was founded by two engineers who combine environmental, water resources and renewable energy expertise.</p>
+        </div>
+        <a class="btn btn--outline" href="/about">About the company <Icon name="arrow" /></a>
+      </div>
+      <div class="grid grid--2">
+        {directors.map((d) => <DirectorCard {...d} />)}
+      </div>
+    </div>
+  </section>
+
+  <CTABand />
+</BaseLayout>
+
+<style>
+  .hero { position: relative; min-height: min(86vh, 720px); display: flex; align-items: center; color: #fff; overflow: hidden; background: var(--terra-charcoal); }
+  .hero picture, .hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(41,54,65,.92) 0%, rgba(41,54,65,.78) 50%, rgba(41,54,65,.35) 100%); }
+  @media (max-width: 800px) { .hero::before { background: rgba(41,54,65,.8); } }
+  .hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: var(--terra-green); z-index: 2; }
+  .hero__inner { position: relative; z-index: 2; padding-top: var(--space-16); padding-bottom: var(--space-16); }
+  .hero__eyebrow { display: inline-block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terra-green); border-bottom: 3px solid var(--terra-green); padding-bottom: var(--space-2); margin-bottom: var(--space-6); }
+  .hero h1 { color: #fff; max-width: 760px; }
+  .hero__sub { max-width: 620px; font-size: 1.15rem; color: #e1e7ea; margin-bottom: var(--space-8); }
+
+  .trust { background: var(--surface-alt); border-bottom: 1px solid var(--line); }
+  .trust__grid { display: grid; gap: var(--space-4); padding-top: var(--space-6); padding-bottom: var(--space-6); }
+  @media (min-width: 640px) { .trust__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .trust__grid { grid-template-columns: repeat(4, 1fr); } }
+  .trust__item { display: flex; gap: var(--space-3); align-items: center; }
+  .trust__item :global(svg) { width: 34px; height: 34px; flex: none; color: var(--green-text); }
+  .trust__item strong { display: block; font-size: 0.95rem; color: var(--terra-charcoal); }
+  .trust__item span { display: block; font-size: 0.83rem; color: var(--ink-muted); line-height: 1.4; }
+
+  .services-cta { padding: var(--space-6); background: var(--terra-charcoal); color: #fff; border-radius: var(--radius-md); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+  .services-cta h3 { color: #fff; }
+  .services-cta p { color: #d5dce1; }
+
+  .why { margin-top: var(--space-8); gap: var(--space-8); }
+  .why__item h3 { color: #fff; font-size: 1.1rem; margin-bottom: var(--space-2); }
+  .why__item p { font-size: 0.95rem; margin: 0; }
+  .why__photo { aspect-ratio: 1; border: 6px solid rgba(114,193,101,.35); }
+
+  .section-head-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--space-4); margin-bottom: var(--space-12); }
+  .section-head-row .section-head { margin-bottom: 0; }
+
+  .field-card { position: relative; margin: 0; border-radius: var(--radius-md); overflow: hidden; min-height: 320px; height: 100%; background: var(--surface-alt); }
+  .field-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .field-card figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--space-8) var(--space-4) var(--space-4); background: linear-gradient(transparent, rgba(41,54,65,.9)); color: #fff; font-weight: 600; display: flex; align-items: center; gap: var(--space-2); }
+
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-6); counter-reset: s; }
+  @media (min-width: 640px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .steps { grid-template-columns: repeat(4, 1fr); } }
+  .step { background: #fff; padding: var(--space-6); border-radius: var(--radius-md); border: 1px solid #d3e6cf; position: relative; }
+  .step__num { display: block; font-size: 2.2rem; font-weight: 700; color: var(--terra-green); line-height: 1; margin-bottom: var(--space-3); }
+  .step h3 { margin-bottom: var(--space-2); }
+  .step p { color: var(--ink-muted); margin: 0; font-size: 0.95rem; }
+</style>

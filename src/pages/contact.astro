@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBanner from '../components/PageBanner.astro';
+import Icon from '../components/Icon.astro';
+import { company, whatsappLink } from '../data/site';
+
+const mapQuery = encodeURIComponent('Dr Lukwiya Road, Naalya, Kira, Uganda');
+---
+<BaseLayout
+  title="Contact Terra Earth Engineering | Naalya, Kira Municipality, Wakiso"
+  description="Contact Terra Earth Engineering (U) Limited. Call +256 781 141473 or +256 783 068298, WhatsApp, email terra.earth2025@gmail.com, or visit us on Dr. Lukwiya Road, Naalya."
+>
+  <PageBanner title="Contact us" label="Get in touch" intro="Call, WhatsApp, email or visit. An engineer will answer your enquiry within one working day." />
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid--4 cards">
+        <a class="ccard" href={`tel:${company.phones[0].tel}`}>
+          <div class="icon-box"><Icon name="phone" /></div>
+          <h2>Call</h2>
+          <p>{company.phones.map((p, i) => <>{i > 0 && <br />}{p.display}</>)}</p>
+        </a>
+        <a class="ccard" href={whatsappLink()} target="_blank" rel="noopener">
+          <div class="icon-box"><Icon name="chat" /></div>
+          <h2>WhatsApp</h2>
+          <p>Chat with us on<br />+{company.whatsapp.number.replace(/^256/, '256 ').replace(/(\d{3})(\d{6})$/, '$1 $2')}</p>
+        </a>
+        <a class="ccard" href={`mailto:${company.email}`}>
+          <div class="icon-box"><Icon name="mail" /></div>
+          <h2>Email</h2>
+          <p class="break">{company.email}</p>
+        </a>
+        <a class="ccard" href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`} target="_blank" rel="noopener">
+          <div class="icon-box"><Icon name="pin" /></div>
+          <h2>Visit</h2>
+          <p>{company.address.building}, {company.address.street}, {company.address.area}</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container contact-layout">
+      <div>
+        <span class="label">Send a message</span>
+        <h2>Quick enquiry</h2>
+        <p class="muted">For a detailed quotation with drawings or a bill of quantities, use our <a href="/quote">quote request form</a>.</p>
+        <form class="form card" name="contact" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="hp"><label>Leave this empty: <input name="bot-field" /></label></p>
+          <div class="form-row form-row--2">
+            <div class="field"><label for="c-name">Full name <span class="req" aria-hidden="true">*</span></label><input id="c-name" name="name" autocomplete="name" required /></div>
+            <div class="field"><label for="c-phone">Phone number <span class="req" aria-hidden="true">*</span></label><input id="c-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required /></div>
+          </div>
+          <div class="field"><label for="c-email">Email <span class="req" aria-hidden="true">*</span></label><input id="c-email" name="email" type="email" autocomplete="email" required /></div>
+          <div class="field"><label for="c-msg">Message <span class="req" aria-hidden="true">*</span></label><textarea id="c-msg" name="message" required></textarea></div>
+          <label class="consent"><input type="checkbox" name="consent" value="yes" required /><span>I agree that Terra Earth may use these details to reply to my enquiry, as described in the <a href="/privacy">privacy policy</a>. <span class="req" aria-hidden="true">*</span></span></label>
+          <div><button class="btn btn--primary" type="submit">Send message <Icon name="arrow" /></button></div>
+        </form>
+      </div>
+      <div class="info">
+        <div class="card info__card">
+          <h2 class="info__title">Office</h2>
+          <ul class="info__list">
+            <li><Icon name="pin" /><span>{company.address.full}</span></li>
+            <li><Icon name="mail" /><span>{company.address.postal}</span></li>
+            <li><Icon name="clock" /><span>{company.hours.map((h) => <>{h.days}: {h.time}<br /></>)}Sunday and public holidays: closed</span></li>
+          </ul>
+        </div>
+        <div class="map">
+          <iframe
+            title="Map showing Terra Earth Engineering on Dr. Lukwiya Road, Naalya"
+            src={`https://maps.google.com/maps?q=${mapQuery}&z=15&output=embed`}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .cards { gap: var(--space-4); }
+  .ccard { display: block; padding: var(--space-6); border: 1px solid var(--line); border-top: 4px solid var(--terra-green); border-radius: var(--radius-md); color: var(--ink); text-decoration: none; transition: box-shadow .2s; }
+  .ccard:hover { box-shadow: 0 12px 30px rgba(41,54,65,.1); color: var(--ink); }
+  .ccard h2 { font-size: 1.2rem; margin-bottom: var(--space-2); }
+  .ccard p { margin: 0; color: var(--ink-muted); font-weight: 500; }
+  .break { word-break: break-all; }
+  .contact-layout { display: grid; gap: var(--space-12); }
+  @media (min-width: 1100px) { .contact-layout { grid-template-columns: 1.2fr 1fr; gap: var(--space-16); } }
+  .form.card { padding: var(--space-8); margin-top: var(--space-6); }
+  .info { display: grid; gap: var(--space-6); align-content: start; }
+  .info__title { font-size: 1.2rem; }
+  .info__list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); }
+  .info__list li { display: flex; gap: var(--space-3); }
+  .info__list :global(svg) { width: 20px; height: 20px; color: var(--green-text); flex: none; margin-top: 3px; }
+  .map { aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--line); background: var(--surface-alt); }
+  .map iframe { width: 100%; height: 100%; border: 0; }
+</style>

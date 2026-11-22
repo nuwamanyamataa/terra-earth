@@ -1,0 +1,21 @@
+---
+import Icon from './Icon.astro';
+import { whatsappLink } from '../data/site';
+---
+<a class="wa-float" href={whatsappLink()} target="_blank" rel="noopener" aria-label="Chat with Terra Earth on WhatsApp">
+  <Icon name="chat" />
+  <span class="wa-float__text">WhatsApp us</span>
+</a>
+
+<style>
+  .wa-float {
+    position: fixed; right: 16px; bottom: 16px; z-index: 40;
+    display: inline-flex; align-items: center; gap: 8px; min-height: 52px; padding: 0 18px 0 16px;
+    background: var(--terra-green); color: var(--on-green); font-weight: 700; font-size: 0.9rem; text-decoration: none;
+    border-radius: 999px; box-shadow: 0 6px 20px rgba(41, 54, 65, 0.25);
+  }
+  .wa-float:hover { background: #5fae52; color: var(--on-green); }
+  .wa-float :global(svg) { width: 24px; height: 24px; }
+  @media (max-width: 479px) { .wa-float__text { display: none; } .wa-float { width: 56px; height: 56px; padding: 0; justify-content: center; } }
+  @media print { .wa-float { display: none; } }
+</style>

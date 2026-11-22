@@ -1,0 +1,70 @@
+---
+import Icon from './Icon.astro';
+import { company, whatsappLink } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer on-dark">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <img src="/logo/terra-earth-logo-reversed-small.png" alt={company.logoName} width="431" height="311" loading="lazy" />
+      <p class="footer__tagline">{company.tagline.join(' | ')}</p>
+      <p>Multidisciplinary engineering for resilient infrastructure and sustainable environmental solutions across Uganda.</p>
+    </div>
+    <div>
+      <h2 class="footer__title">Quick links</h2>
+      <ul class="footer__links">
+        <li><a href="/about">About us</a></li>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/qhse">QHSE commitment</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/quote">Request a quote</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="footer__title">Services</h2>
+      <ul class="footer__links">
+        <li><a href="/services/civil-engineering">Civil engineering works</a></li>
+        <li><a href="/services/environmental">Environmental engineering</a></li>
+        <li><a href="/services/water-resources">Water resources & solar</a></li>
+        <li><a href="/services/project-management">Project management</a></li>
+        <li><a href="/qhse">QHSE</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="footer__title">Contact</h2>
+      <ul class="footer__contact">
+        <li><Icon name="pin" /><span>{company.address.building}, {company.address.street},<br />{company.address.area}, Kira Municipality, Wakiso</span></li>
+        <li><Icon name="mail" /><span>{company.address.postal}</span></li>
+        <li><Icon name="phone" /><span>{company.phones.map((p, i) => <>{i > 0 && <br />}<a href={`tel:${p.tel}`}>{p.display}</a></>)}</span></li>
+        <li><Icon name="chat" /><a href={whatsappLink()} target="_blank" rel="noopener">WhatsApp us</a></li>
+        <li><Icon name="mail" /><a href={`mailto:${company.email}`}>{company.email}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <span>© {year} {company.registeredName}. All rights reserved.</span>
+      <span class="footer__legal"><a href="/privacy">Privacy policy</a><span aria-hidden="true">·</span><span>TIN {company.tin}</span></span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--terra-charcoal); color: #c7d0d6; font-size: 0.92rem; padding-top: var(--space-16); }
+  .footer__grid { display: grid; gap: var(--space-8); padding-bottom: var(--space-12); }
+  @media (min-width: 640px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 960px) { .footer__grid { grid-template-columns: 1.4fr 1fr 1.1fr 1.5fr; } }
+  .footer__brand img { width: 190px; height: auto; margin-bottom: var(--space-4); }
+  .footer__tagline { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; color: var(--terra-green); }
+  .footer__title { color: #fff; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: var(--space-4); padding-bottom: var(--space-2); border-bottom: 3px solid var(--terra-green); display: inline-block; }
+  .footer__links, .footer__contact { list-style: none; padding: 0; margin: 0; }
+  .footer__links li { margin-bottom: var(--space-2); }
+  .footer a { color: #c7d0d6; text-decoration: none; }
+  .footer a:hover { color: var(--terra-green); text-decoration: underline; }
+  .footer__contact li { display: flex; gap: var(--space-3); margin-bottom: var(--space-3); align-items: flex-start; }
+  .footer__contact :global(svg) { width: 18px; height: 18px; color: var(--terra-green); flex: none; margin-top: 3px; }
+  .footer__bottom { border-top: 1px solid rgba(255,255,255,.1); padding: var(--space-4) 0 calc(var(--space-4) + 70px); font-size: 0.82rem; }
+  @media (min-width: 640px) { .footer__bottom { padding-bottom: var(--space-4); } }
+  .footer__bottom-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); }
+  .footer__legal { display: inline-flex; gap: var(--space-2); }
+</style>

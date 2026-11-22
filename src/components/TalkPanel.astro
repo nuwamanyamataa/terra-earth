@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro';
+import { company, whatsappLink } from '../data/site';
+interface Props { service?: string }
+const { service } = Astro.props;
+const msg = service ? `Hello Terra Earth, I would like to enquire about ${service}.` : undefined;
+---
+<aside class="talk on-dark" aria-label="Talk to an engineer">
+  <span class="label">Talk to an engineer</span>
+  <h2>Not sure what you need?</h2>
+  <p>Describe your site and what you want to achieve. We will advise on the next step, free of charge.</p>
+  <div class="talk__actions">
+    <a class="btn btn--primary" href={`tel:${company.phones[0].tel}`}><Icon name="phone" /> {company.phones[0].display}</a>
+    <a class="btn btn--outline-light" href={whatsappLink(msg)} target="_blank" rel="noopener"><Icon name="chat" /> WhatsApp</a>
+    <a class="btn btn--outline-light" href="/quote">Request a Quote <Icon name="arrow" /></a>
+  </div>
+</aside>
+
+<style>
+  .talk { background: var(--terra-charcoal); color: #fff; padding: var(--space-8); border-radius: var(--radius-md); border-top: 5px solid var(--terra-green); }
+  .talk h2 { color: #fff; font-size: 1.5rem; }
+  .talk p { color: #d5dce1; }
+  .talk__actions { display: grid; gap: var(--space-3); }
+</style>

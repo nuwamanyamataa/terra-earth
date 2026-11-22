@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import Icon from '../../components/Icon.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import FAQ from '../../components/FAQ.astro';
+import TalkPanel from '../../components/TalkPanel.astro';
+import CTABand from '../../components/CTABand.astro';
+import { getProjects, getServices, fieldPhotos } from '../../data/content';
+
+export async function getStaticPaths() {
+  const services = await getServices();
+  return services.map((s) => ({ params: { slug: s.slug }, props: { service: s } }));
+}
+const { service } = Astro.props;
+const { data } = service;
+const { Content } = await service.render();
+
+const others = (await getServices()).filter((s) => s.slug !== service.slug);
+const related = (await getProjects()).filter((p) => p.data.categories.some((c) => data.categories.includes(c))).slice(0, 3);
+const photos = fieldPhotos.filter((f) => data.categories.includes(f.category)).slice(0, 2);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: data.title,
+  description: data.metaDescription,
+  serviceType: data.title,
+  areaServed: { '@type': 'Country', name: 'Uganda' },
+  provider: { '@id': 'https://www.terra-earth.co.ug/#organization' },
+};
+---
+<BaseLayout title={data.metaTitle} description={data.metaDescription} schema={schema}>
+  <PageBanner title={data.title} label={data.shortTitle} intro={data.promise} crumbs={[{ label: 'Services', href: '/services' }]} image={data.image} />
+
+  <section class="section">
+    <div class="container layout">
+      <div class="main">
+        <span class="label">Overview</span>
+        <div class="prose"><Content /></div>
+
+        <h2 class="sub">What we offer</h2>
+        <div class="grid grid--2 offers">
+          {data.offers.map((o) => (
+            <div class="offer reveal">
+              <div class="icon-box"><Icon name={o.icon ?? 'check'} /></div>
+              <div><h3>{o.title}</h3><p>{o.text}</p></div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <aside class="side">
+        <figure class="photo side__photo"><img src={data.image} alt={data.imageAlt} width="700" height="1190" /></figure>
+        <TalkPanel service={data.title.toLowerCase()} />
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section-head">
+        <span class="label">Our process</span>
+        <h2>How we deliver {data.shortTitle.toLowerCase()} projects</h2>
+      </div>
+      <ol class="process">
+        {data.process.map((p, i) => (
+          <li class="process__step reveal">
+            <span class="process__num">{i + 1}</span>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {(related.length > 0 || photos.length > 0) && (
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="label">Related work</span>
+          <h2>{data.shortTitle} projects and field work</h2>
+        </div>
+        <div class="grid grid--3">
+          {related.map((p) => (
+            <ProjectCard title={p.data.title} href={`/projects/${p.slug}`} image={p.data.image} imageAlt={p.data.imageAlt} location={p.data.location} clientType={p.data.clientType} year={p.data.year} categories={p.data.categories} draft={p.data.draft} />
+          ))}
+          {photos.map((f) => (
+            <figure class="photo fieldphoto reveal"><img src={f.src} alt={f.alt} loading="lazy" width="800" height="1000" /><figcaption>{f.caption}</figcaption></figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section section--alt">
+    <div class="container faq-wrap">
+      <div>
+        <span class="label">FAQs</span>
+        <h2>Common questions</h2>
+        <p class="muted">Can't find your answer? Call or WhatsApp us — an engineer will help.</p>
+      </div>
+      <FAQ items={data.faqs} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><span class="label">More services</span><h2>Explore our other services</h2></div>
+      <div class="grid grid--4 more">
+        {others.map((o) => (
+          <a class="more__link" href={`/services/${o.slug}`}><Icon name={o.data.icon} /><span>{o.data.title}</span><Icon name="arrow" class="more__arrow" /></a>
+        ))}
+        <a class="more__link" href="/qhse"><Icon name="hardhat" /><span>QHSE</span><Icon name="arrow" class="more__arrow" /></a>
+      </div>
+    </div>
+  </section>
+
+  <CTABand />
+</BaseLayout>
+
+<style>
+  .layout { display: grid; gap: var(--space-12); }
+  @media (min-width: 1100px) { .layout { grid-template-columns: 1fr 360px; gap: var(--space-16); } .side { position: sticky; top: 100px; align-self: start; } }
+  .prose { font-size: 1.08rem; max-width: 70ch; }
+  .prose :global(p:first-child) { font-size: 1.2rem; color: var(--terra-charcoal); font-weight: 500; }
+  .sub { margin-top: var(--space-12); margin-bottom: var(--space-6); }
+  .offers { gap: var(--space-4); }
+  .offer { display: flex; gap: var(--space-4); padding: var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-md); }
+  .offer .icon-box { flex: none; margin: 0; width: 44px; height: 44px; }
+  .offer .icon-box :global(svg) { width: 24px; height: 24px; }
+  .offer h3 { font-size: 1.02rem; margin-bottom: 4px; }
+  .offer p { font-size: 0.92rem; color: var(--ink-muted); margin: 0; }
+  .side { display: grid; gap: var(--space-6); }
+  .side__photo { aspect-ratio: 4 / 3; display: none; }
+  @media (min-width: 1100px) { .side__photo { display: block; } }
+
+  .process { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); }
+  @media (min-width: 960px) { .process { grid-template-columns: repeat(5, 1fr); } }
+  .process__step { position: relative; background: #fff; padding: var(--space-6); border-radius: var(--radius-md); }
+  .process__num { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--terra-charcoal); color: var(--terra-green); font-weight: 700; margin-bottom: var(--space-3); }
+  .process__step h3 { font-size: 1.05rem; margin-bottom: var(--space-2); }
+  .process__step p { font-size: 0.92rem; color: var(--ink-muted); margin: 0; }
+
+  .fieldphoto { aspect-ratio: 4 / 3; position: relative; margin: 0; }
+  .fieldphoto figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--space-6) var(--space-4) var(--space-4); background: linear-gradient(transparent, rgba(41,54,65,.9)); color: #fff; font-weight: 600; font-size: 0.95rem; }
+
+  .faq-wrap { display: grid; gap: var(--space-8); }
+  @media (min-width: 960px) { .faq-wrap { grid-template-columns: 1fr 2fr; gap: var(--space-16); } }
+
+  .more { gap: var(--space-4); }
+  .more__link { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-6); min-height: 72px; border: 1px solid var(--line); border-radius: var(--radius-md); font-weight: 600; color: var(--terra-charcoal); text-decoration: none; }
+  .more__link:hover { border-color: var(--terra-green); background: var(--green-soft); }
+  .more__link :global(svg) { width: 24px; height: 24px; color: var(--green-text); flex: none; }
+  .more__link span { flex: 1; }
+  .more__link :global(.more__arrow) { width: 18px; height: 18px; }
+</style>

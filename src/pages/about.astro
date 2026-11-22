@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBanner from '../components/PageBanner.astro';
+import Icon from '../components/Icon.astro';
+import DirectorCard from '../components/DirectorCard.astro';
+import CTABand from '../components/CTABand.astro';
+import { company, directors, values, vision, mission, team } from '../data/site';
+
+const apart = [
+  { icon: 'users', title: 'A multidisciplinary team', text: `Our team brings together ${team.slice(0, -1).join(', ').toLowerCase()} and ${team.at(-1)!.toLowerCase()}, working together for technical excellence and effective delivery.` },
+  { icon: 'layers', title: 'From study to construction', text: 'We plan, design, get approvals, build and supervise. One accountable partner for the whole project lifecycle.' },
+  { icon: 'chart', title: 'Data-driven engineering', text: 'Engineering software, GIS mapping, hydraulic modelling and established environmental assessment methods behind every recommendation.' },
+  { icon: 'shield', title: 'Compliance and safety', text: 'Guided by international best practice, national regulatory frameworks and a firm commitment to safety, quality and sustainability.' },
+];
+---
+<BaseLayout
+  title="About Terra Earth Engineering | Ugandan Engineering Firm"
+  description="Terra Earth Engineering (U) Limited is a multidisciplinary Ugandan engineering firm in civil engineering, environmental management, water resources and project management. Meet the directors."
+>
+  <PageBanner title="About Terra Earth" label="Who we are" intro="A multidisciplinary engineering firm delivering technically sound, environmentally sustainable and socially responsible infrastructure." image="/images/terraced-hills.webp" />
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <span class="label">Our story</span>
+        <h2>Engineering excellence with environmental stewardship</h2>
+        <p><strong>{company.registeredName}</strong> is a multidisciplinary engineering firm specialising in civil engineering, environmental management, water resources development and project management. Founded in {company.founded} by two engineers, we deliver infrastructure solutions that meet the evolving needs of development partners, communities, and public and private sector clients.</p>
+        <p>We integrate innovative design, regulatory compliance and practical implementation to make sure projects succeed across diverse sectors. Our approach is guided by international best practice, national regulatory frameworks, and a commitment to safety, quality and sustainability.</p>
+      </div>
+      <figure class="photo about-photo reveal">
+        <img src="/images/site-crew-aggregate.webp" alt="Terra Earth site crew in hard hats and high-visibility vests handling aggregate on a hillside construction site" loading="lazy" width="800" height="1000" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container">
+      <div class="grid grid--2 mv">
+        <div class="mv__card reveal">
+          <span class="label">Our vision</span>
+          <p class="mv__text">{vision}</p>
+        </div>
+        <div class="mv__card reveal">
+          <span class="label">Our mission</span>
+          <p class="mv__text">{mission}</p>
+        </div>
+      </div>
+      <div class="section-head values-head">
+        <span class="label">Core values</span>
+        <h2>What guides our work</h2>
+      </div>
+      <div class="grid grid--4">
+        {values.map((v, i) => (
+          <div class="card value reveal">
+            <span class="value__num">{String(i + 1).padStart(2, '0')}</span>
+            <div class="icon-box"><Icon name={v.icon} /></div>
+            <h3>{v.title}</h3>
+            <p class="muted">{v.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="leadership">
+    <div class="container">
+      <div class="section-head">
+        <span class="label">Leadership</span>
+        <h2>Our directors</h2>
+        <p class="lead">Terra Earth is led by qualified engineers who stay close to the work on every project.</p>
+      </div>
+      <div class="grid grid--2">
+        {directors.map((d) => <DirectorCard {...d} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <div class="section-head">
+        <span class="label">What sets us apart</span>
+        <h2>Why clients choose Terra Earth</h2>
+      </div>
+      <div class="grid grid--2 apart">
+        {apart.map((a) => (
+          <div class="apart__item reveal">
+            <div class="icon-box"><Icon name={a.icon} /></div>
+            <div><h3>{a.title}</h3><p>{a.text}</p></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="credentials">
+    <div class="container split">
+      <div>
+        <span class="label">Company credentials</span>
+        <h2>Registered, compliant and ready to tender</h2>
+        <p>Procurement officers can find our key company details here. Our full company profile and registration documents are available on request.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={`mailto:${company.email}?subject=${encodeURIComponent('Request: Terra Earth company profile')}`}><Icon name="download" /> Request company profile</a>
+          <a class="btn btn--outline" href="/contact">Contact us</a>
+        </div>
+      </div>
+      <dl class="creds">
+        <div><dt>Registered name</dt><dd>{company.registeredName}</dd></div>
+        <div><dt>Company type</dt><dd>Private company limited by shares</dd></div>
+        <div><dt>Registration</dt><dd>Uganda Registration Services Bureau (URSB), {company.founded}</dd></div>
+        <div><dt>URA TIN</dt><dd>{company.tin}</dd></div>
+        <div><dt>Registered office</dt><dd>{company.address.full}</dd></div>
+        <div><dt>Professional memberships &amp; licences</dt><dd class="muted">Available on request</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <CTABand />
+</BaseLayout>
+
+<style>
+  .about-photo { aspect-ratio: 4 / 5; max-height: 560px; }
+  .mv { margin-bottom: var(--space-16); }
+  .mv__card { background: #fff; padding: var(--space-8); border-radius: var(--radius-md); border-left: 0; border-top: 5px solid var(--terra-green); }
+  .mv__text { font-size: 1.2rem; font-weight: 600; color: var(--terra-charcoal); line-height: 1.5; margin: 0; }
+  .values-head { margin-bottom: var(--space-8); }
+  .value { position: relative; }
+  .value__num { position: absolute; top: var(--space-4); right: var(--space-6); font-size: 1.8rem; font-weight: 700; color: var(--terra-green); }
+  .apart { gap: var(--space-8); }
+  .apart__item { display: flex; gap: var(--space-4); align-items: flex-start; }
+  .apart__item .icon-box { flex: none; }
+  .apart__item h3 { margin-bottom: var(--space-2); }
+  .creds { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-md); }
+  .creds div { display: grid; gap: 2px; padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--line); }
+  .creds div:last-child { border-bottom: 0; }
+  @media (min-width: 640px) { .creds div { grid-template-columns: 200px 1fr; gap: var(--space-4); } }
+  .creds dt { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); padding-top: 3px; }
+  .creds dd { margin: 0; font-weight: 600; }
+</style>

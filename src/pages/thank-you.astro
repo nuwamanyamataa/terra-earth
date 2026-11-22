@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { company, whatsappLink } from '../data/site';
+---
+<BaseLayout title="Thank you | Terra Earth Engineering" description="Your message has been sent to Terra Earth Engineering." noindex>
+  <section class="section ty">
+    <div class="container">
+      <div class="ty__icon"><Icon name="check" /></div>
+      <h1>Thank you — an engineer will contact you within one working day.</h1>
+      <p class="lead">We have received your message. If your request is urgent, call or WhatsApp us now.</p>
+      <div class="btn-row">
+        <a class="btn btn--dark" href={`tel:${company.phones[0].tel}`}><Icon name="phone" /> {company.phones[0].display}</a>
+        <a class="btn btn--outline" href={whatsappLink()} target="_blank" rel="noopener"><Icon name="chat" /> WhatsApp</a>
+        <a class="btn btn--outline" href="/">Back to home</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ty { min-height: 60vh; display: flex; align-items: center; background: var(--green-soft); }
+  .ty h1 { max-width: 760px; font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
+  .ty__icon { width: 72px; height: 72px; border-radius: 50%; background: var(--terra-green); color: var(--on-green); display: grid; place-items: center; margin-bottom: var(--space-6); }
+  .ty__icon :global(svg) { width: 40px; height: 40px; }
+</style>

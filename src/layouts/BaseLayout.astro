@@ -1,0 +1,91 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { company } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+}
+const { title, description, image = '/og-image.png', noindex = false, schema } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': ['ProfessionalService', 'LocalBusiness'],
+  '@id': `${company.website}/#organization`,
+  name: company.registeredName,
+  alternateName: company.shortName,
+  description: company.description,
+  url: company.website,
+  logo: `${company.website}/logo/terra-earth-logo.png`,
+  image: `${company.website}/og-image.png`,
+  email: company.email,
+  telephone: company.phones.map((p) => p.tel),
+  foundingDate: '2024-12',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${company.address.building}, ${company.address.street}, ${company.address.area}`,
+    addressLocality: 'Kira Municipality',
+    addressRegion: 'Wakiso',
+    postOfficeBoxNumber: '178031',
+    addressCountry: 'UG',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: company.address.geo.lat, longitude: company.address.geo.lng },
+  areaServed: { '@type': 'Country', name: 'Uganda' },
+  knowsAbout: [
+    'Civil engineering', 'Environmental and Social Impact Assessment', 'Borehole drilling supervision',
+    'Solar water pumping', 'Irrigation design', 'Project management', 'QHSE',
+  ],
+};
+const schemas = [business, ...(schema ? (Array.isArray(schema) ? schema : [schema]) : [])];
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#293641" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={company.registeredName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppButton />
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>

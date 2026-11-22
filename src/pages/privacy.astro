@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBanner from '../components/PageBanner.astro';
+import { company } from '../data/site';
+const updated = '22 November 2026';
+---
+<BaseLayout
+  title="Privacy Policy | Terra Earth Engineering"
+  description="How Terra Earth Engineering (U) Limited collects, uses and protects personal data sent through this website, in line with Uganda's Data Protection and Privacy Act, 2019."
+>
+  <PageBanner title="Privacy policy" label="Your data" intro="How we handle the information you send us through this website." />
+  <section class="section">
+    <div class="container">
+      <div class="policy">
+        <p class="muted">Last updated: {updated}</p>
+
+        <h2>Who we are</h2>
+        <p>This website is run by {company.registeredName} ("Terra Earth", "we"), {company.address.full}. You can contact us about privacy at <a href={`mailto:${company.email}`}>{company.email}</a> or {company.phones[0].display}.</p>
+
+        <h2>What we collect</h2>
+        <p>When you use our contact or quote request forms, we collect the details you choose to give us: your name, phone number, email address, organisation, project location and description, budget range, how you heard about us, and any file you upload.</p>
+        <p>We do not use advertising trackers. Our hosting provider keeps standard technical logs (such as IP address and browser type) to keep the site secure and working.</p>
+
+        <h2>Why we use it</h2>
+        <ul>
+          <li>To reply to your enquiry and prepare a quotation.</li>
+          <li>To arrange site visits and deliver any work you ask us to do.</li>
+          <li>To keep records required by law, such as for tax and contracts.</li>
+        </ul>
+        <p>We use your data only with your consent, which you give by ticking the box on the form, or where we need it to enter into or carry out a contract with you. We never sell your data.</p>
+
+        <h2>Who we share it with</h2>
+        <p>Form submissions are processed by our website host (Netlify) and delivered to our email. We share your details with others only when needed to deliver your project (for example, a testing laboratory) or when the law requires it.</p>
+
+        <h2>How long we keep it</h2>
+        <p>We keep enquiries that do not lead to work for up to 24 months, then delete them. Records for projects we carry out are kept for as long as the law and our contract require.</p>
+
+        <h2>Your rights</h2>
+        <p>Under Uganda's Data Protection and Privacy Act, 2019, you can ask to see the personal data we hold about you, ask us to correct it, or ask us to delete it. You can also withdraw your consent at any time. Email <a href={`mailto:${company.email}`}>{company.email}</a> and we will respond promptly. If you are not satisfied, you can complain to the Personal Data Protection Office.</p>
+
+        <h2>Security</h2>
+        <p>This website uses HTTPS encryption. Access to enquiries is limited to Terra Earth staff who need it to respond.</p>
+
+        <h2>Changes</h2>
+        <p>We may update this policy. The date at the top shows when it last changed.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .policy { max-width: 760px; }
+  .policy h2 { font-size: 1.35rem; margin-top: var(--space-8); }
+</style>

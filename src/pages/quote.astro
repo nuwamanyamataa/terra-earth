@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBanner from '../components/PageBanner.astro';
+import Icon from '../components/Icon.astro';
+import { company, whatsappLink } from '../data/site';
+
+const services = [
+  'Civil Engineering Works',
+  'Environmental Engineering & Management (ESIA, audits)',
+  'Water Resources (boreholes, water supply, irrigation)',
+  'Solar power or solar water pumping',
+  'Project Management & Supervision',
+  'QHSE services',
+  'Other',
+];
+const budgets = ['Under UGX 10 million', 'UGX 10–50 million', 'UGX 50–200 million', 'UGX 200 million – 1 billion', 'Over UGX 1 billion', 'Not sure yet'];
+const sources = ['Google search', 'Recommendation', 'Social media', 'WhatsApp', 'Saw our work on site', 'Tender / procurement notice', 'Other'];
+---
+<BaseLayout
+  title="Request a Quote | Terra Earth Engineering"
+  description="Request a quotation from Terra Earth Engineering for civil works, ESIA, boreholes, solar water pumping, irrigation or project management in Uganda. Reply within one working day."
+>
+  <PageBanner title="Request a quote" label="Start your project" intro="Tell us about your project. An engineer will contact you within one working day to discuss it and arrange a site visit if needed." />
+
+  <section class="section section--alt">
+    <div class="container quote-layout">
+      <form class="form card qform" name="quote" method="POST" action="/thank-you" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="quote" />
+        <p class="hp"><label>Leave this empty: <input name="bot-field" /></label></p>
+
+        <fieldset>
+          <legend>Your details</legend>
+          <div class="form-row form-row--2">
+            <div class="field"><label for="q-name">Full name <span class="req" aria-hidden="true">*</span></label><input id="q-name" name="name" autocomplete="name" required /></div>
+            <div class="field"><label for="q-org">Organisation <span class="opt">(optional)</span></label><input id="q-org" name="organisation" autocomplete="organization" /></div>
+          </div>
+          <div class="form-row form-row--2">
+            <div class="field"><label for="q-phone">Phone number <span class="req" aria-hidden="true">*</span></label><input id="q-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required /></div>
+            <div class="field"><label for="q-email">Email <span class="req" aria-hidden="true">*</span></label><input id="q-email" name="email" type="email" autocomplete="email" required /></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Your project</legend>
+          <div class="form-row form-row--2">
+            <div class="field">
+              <label for="q-service">Service needed <span class="req" aria-hidden="true">*</span></label>
+              <select id="q-service" name="service" required>
+                <option value="">Choose a service…</option>
+                {services.map((s) => <option>{s}</option>)}
+              </select>
+            </div>
+            <div class="field"><label for="q-loc">Project location (district) <span class="req" aria-hidden="true">*</span></label><input id="q-loc" name="location" placeholder="e.g. Wakiso" required /></div>
+          </div>
+          <div class="field">
+            <label for="q-desc">Project description <span class="req" aria-hidden="true">*</span></label>
+            <textarea id="q-desc" name="description" required aria-describedby="q-desc-hint"></textarea>
+            <p class="hint" id="q-desc-hint">What do you want to achieve? Include sizes, quantities or deadlines if you know them.</p>
+          </div>
+          <div class="form-row form-row--2">
+            <div class="field"><label for="q-start">Estimated start date <span class="opt">(optional)</span></label><input id="q-start" name="start_date" type="date" /></div>
+            <div class="field">
+              <label for="q-budget">Budget range <span class="opt">(optional)</span></label>
+              <select id="q-budget" name="budget"><option value="">Choose a range…</option>{budgets.map((b) => <option>{b}</option>)}</select>
+            </div>
+          </div>
+          <div class="form-row form-row--2">
+            <div class="field">
+              <label for="q-source">How did you hear about us? <span class="opt">(optional)</span></label>
+              <select id="q-source" name="source"><option value="">Choose one…</option>{sources.map((s) => <option>{s}</option>)}</select>
+            </div>
+            <div class="field">
+              <label for="q-file">Drawings or BOQ <span class="opt">(optional)</span></label>
+              <input id="q-file" name="attachment" type="file" accept=".pdf,.jpg,.jpeg,.png,.dwg,.xlsx,.xls,.doc,.docx" aria-describedby="q-file-hint" />
+              <p class="hint" id="q-file-hint">One file, up to 8 MB (PDF, image, Word, Excel or DWG).</p>
+            </div>
+          </div>
+        </fieldset>
+
+        <label class="consent"><input type="checkbox" name="consent" value="yes" required /><span>I agree that Terra Earth may use these details to prepare a quotation and contact me, as described in the <a href="/privacy">privacy policy</a>. <span class="req" aria-hidden="true">*</span></span></label>
+        <div><button class="btn btn--primary" type="submit">Send quote request <Icon name="arrow" /></button></div>
+        <p class="hint"><span class="req">*</span> Required fields</p>
+      </form>
+
+      <aside class="aside">
+        <div class="card next">
+          <h2>What happens next</h2>
+          <ol>
+            <li><strong>We reply within one working day</strong> to discuss your project.</li>
+            <li><strong>Site visit</strong> if needed, to understand the conditions.</li>
+            <li><strong>Clear quotation</strong> with scope, cost, programme and warranty.</li>
+          </ol>
+        </div>
+        <div class="card prefer">
+          <h2>Prefer to talk?</h2>
+          <div class="btn-row">
+            <a class="btn btn--dark" href={`tel:${company.phones[0].tel}`}><Icon name="phone" /> {company.phones[0].display}</a>
+            <a class="btn btn--outline" href={whatsappLink('Hello Terra Earth, I would like a quotation for ')} target="_blank" rel="noopener"><Icon name="chat" /> WhatsApp</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .quote-layout { display: grid; gap: var(--space-8); }
+  @media (min-width: 1100px) { .quote-layout { grid-template-columns: 1fr 360px; gap: var(--space-12); } .aside { position: sticky; top: 100px; align-self: start; } }
+  .qform { padding: var(--space-6); }
+  @media (min-width: 640px) { .qform { padding: var(--space-8); } }
+  fieldset { border: 0; padding: 0; margin: 0 0 var(--space-4); display: grid; gap: var(--space-4); }
+  legend { font-size: 1.2rem; font-weight: 700; color: var(--terra-charcoal); margin-bottom: var(--space-4); padding-bottom: var(--space-2); border-bottom: 3px solid var(--terra-green); }
+  .opt { font-weight: 400; color: var(--ink-muted); font-size: 0.82rem; }
+  .field input[type='file'] { padding: 10px; }
+  .aside { display: grid; gap: var(--space-6); }
+  .next h2, .prefer h2 { font-size: 1.2rem; }
+  .next ol { padding-left: 1.2rem; margin: 0; display: grid; gap: var(--space-3); }
+  .next li::marker { color: var(--green-text); font-weight: 700; }
+</style>

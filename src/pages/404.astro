@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+<BaseLayout title="Page not found | Terra Earth Engineering" description="The page you are looking for could not be found." noindex>
+  <section class="section nf">
+    <div class="container">
+      <span class="label">Error 404</span>
+      <h1>We couldn't find that page</h1>
+      <p class="lead">The link may be old, or the address may have a typo. These pages may help:</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/">Home <Icon name="arrow" /></a>
+        <a class="btn btn--outline" href="/services">Our services</a>
+        <a class="btn btn--outline" href="/contact">Contact us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf { min-height: 60vh; display: flex; align-items: center; background: var(--green-soft); }
+</style>

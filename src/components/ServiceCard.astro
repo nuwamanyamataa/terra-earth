@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+interface Props { title: string; text: string; href: string; icon: string }
+const { title, text, href, icon } = Astro.props;
+---
+<article class="svc reveal">
+  <div class="icon-box"><Icon name={icon} /></div>
+  <h3><a href={href}>{title}</a></h3>
+  <p>{text}</p>
+  <span class="link-arrow" aria-hidden="true">Learn more <Icon name="arrow" /></span>
+</article>
+
+<style>
+  .svc { position: relative; height: 100%; padding: var(--space-6); background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--terra-green); border-radius: var(--radius-md); transition: box-shadow .2s, transform .2s; display: flex; flex-direction: column; }
+  .svc:hover { box-shadow: 0 12px 30px rgba(41,54,65,.1); transform: translateY(-2px); }
+  .svc h3 { margin-bottom: var(--space-2); }
+  .svc h3 a { color: var(--terra-charcoal); text-decoration: none; }
+  .svc h3 a::after { content: ''; position: absolute; inset: 0; }
+  .svc h3 a:focus-visible { outline: none; }
+  .svc:focus-within { outline: 3px solid var(--terra-green); outline-offset: 2px; }
+  .svc p { color: var(--ink-muted); flex: 1; }
+</style>
